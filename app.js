@@ -18,8 +18,10 @@ function handler (req, res) {
 }
 
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
+  socket.emit('message', { name: 'Kashif', message: 'Hello World'});
+  socket.on('message', function (data) {
+    console.log("%s: %s", data.name, data.message);
+    socket.emit('message', { name: data.name, message: data.message});
+    socket.emit('message', { name: 'Kashif', message: data.message + '!'});
   });
 });

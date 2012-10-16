@@ -1,3 +1,7 @@
+var socketIOInitialized = false;
+var simplechatUrl = 'http://localhost:1337';
+var socket;
+
 function drawChat() {
   var body = document.body;
   // create chatbox css
@@ -28,18 +32,40 @@ function onTextareaKeyPressed() {
 }
 
 function sendMessage(text) {
-
+  if (!socketIOInitialized)
+    return false;
+  socket.emit('message', {name: 'Gabe: ', message: text});
 }
 
-function loadSocketIO() {
-  var socketIOUrl = 'localhost:3000/socket.io/socket.io.js';
-  var head = document.getElementsByTagName('head')[0];
-  var socketIOLoadedCallback = function() {
-
-  };
-
-
+function messageReceived(data) {
+  var chatboxConversation = document.getElementById('chatbox-conversation');
+  var message = document.createElement('div');
+  message.innerHTML = data.name + ': ' + data.message;
+  chatboxConversation.appendChild(message);
 }
+
+function loadSocketIO(callback)
+{
+    // adding the script tag to the head as suggested before
+   var head = document.getElementsByTagName('head')[0];
+   var script = document.createElement('script');
+   script.type = 'text/javascript';
+   script.src = simplechatUrl + '/socket.io/socket.io.js';
+   var loadedCallback = function() {
+    socket = io.connect(simplechatUrl);
+    socket.on('message', messageReceived);
+    socketIOInitialized = true;
+   };
+
+   // then bind the event to the callback function 
+   // there are several events for cross browser compatibility
+   script.onreadystatechange = loadedCallback;
+   script.onload = loadedCallback;
+
+   // fire the loading
+   head.appendChild(script);
+}
+
 
 function onLoad() {
   loadSocketIO();
