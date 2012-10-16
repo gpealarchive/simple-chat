@@ -9,13 +9,14 @@ function drawChat() {
   css.type = 'text/css';
   css.innerHTML =  '#chatbox { position: absolute; bottom: 0px; right: 0px; height: 300px; width: 200px; background: red; }';
   css.innerHTML += '#chatbox-textarea { position: absolute; width: 180px; margin-left: 3px; margin-bottom: 2px; height: 30px; bottom: 0px;}';
-  css.innerHTML += '#chatbox-conversation { background: gray; height: 246px; width: 195px; margin-left: 3px; margin-top: 3px; }';
+  css.innerHTML += '#chatbox-conversation { background: gray; height: 246px; width: 195px; margin-left: 3px; margin-top: 3px; overflow:scroll; }';
+  css.innerHTML +=  '.wordwrap {  white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }';
   css.innerHTML += "#chatbox textarea { resize: none; }"
   body.appendChild(css);  
   //create chatbox
   var chatBox = document.createElement('div');
   chatBox.id = 'chatbox';
-  chatBox.innerHTML =  '<div id="chatbox-conversation">';
+  chatBox.innerHTML =  '<div id="chatbox-conversation" class="wordwrap">';
   chatBox.innerHTML += '</div>';
   chatBox.innerHTML += '<textarea id="chatbox-textarea" rows=3 cols=5></textarea>';
   body.appendChild(chatBox);
@@ -34,7 +35,7 @@ function onTextareaKeyPressed() {
 function sendMessage(text) {
   if (!socketIOInitialized)
     return false;
-  socket.emit('message', {name: 'Gabe: ', message: text});
+  socket.emit('message', {name: 'Gabe', message: text});
 }
 
 function messageReceived(data) {
