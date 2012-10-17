@@ -1,0 +1,1 @@
+To use this on your site, add this: <script src="http://#SERVERNAME#/simplechat.js"></script> to your page where #SERVERNAME# is the url of the simplechat server
